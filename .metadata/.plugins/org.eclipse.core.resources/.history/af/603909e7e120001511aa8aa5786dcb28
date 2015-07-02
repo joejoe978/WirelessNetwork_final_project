@@ -263,6 +263,13 @@ def processRxLocation(img_path):
         #print dists
         return dists
 
+    def least_squares_rotation(rotation):
+        rotation = rotation.reshape((3,3))
+        r = transmitters.T - rotation.dot(absolute_centers) - rx_location.reshape(3,1)
+        r = numpy.square(r)
+        r = r.flatten()
+        return r
+
 
     def initial_position_guess(transmitters):
         '''Need to see huerisitic with a location; use the average of lights'''

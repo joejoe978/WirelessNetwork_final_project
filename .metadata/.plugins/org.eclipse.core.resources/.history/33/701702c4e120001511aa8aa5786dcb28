@@ -6,8 +6,6 @@ import scipy.misc
 import scipy.ndimage
 import scipy.signal
 import scipy.cluster
-import scipy.optimize
-
 import re
 from random import randint
 from operator import itemgetter
@@ -250,7 +248,7 @@ def processRxLocation(img_path):
     #Start compute Tx Ty Tz 
     k_vals, ier = scipy.optimize.leastsq(least_squares_scaling_factors, k_vals_init)
     #print "k_vals : " , k_vals
-    
+
 
     def least_squares_rx_location(rx_location):
         dists = []
@@ -262,6 +260,13 @@ def processRxLocation(img_path):
              
         #print dists
         return dists
+
+    def least_squares_rotation(rotation):
+        rotation = rotation.reshape((3,3))
+        r = transmitters.T - rotation.dot(absolute_centers) - rx_location.reshape(3,1)
+        r = numpy.square(r)
+        r = r.flatten()
+        return r
 
 
     def initial_position_guess(transmitters):
